@@ -8,7 +8,7 @@ class Wordfreq
     contents = File.read(filename).downcase.gsub("--", " ")
     @contents = contents.gsub(/[^a-z0-9\s]/i, "")
     @words = @contents.split(" ") - STOP_WORDS
-    frequencies
+    @words_frequency = @words.each_with_object(Hash.new(0)) { |word, counts| counts[word] += 1  }.sort_by { |word, frequency| frequency }.reverse.to_h
     top_words(3)
   end
 
@@ -20,10 +20,12 @@ class Wordfreq
     end
   end
 
-  def frequencies
-    @words_frequency = @words.each_with_object(Hash.new(0)) { |word, counts| counts[word] += 1  }.sort_by { |word, frequency| frequency }.reverse.to_h
-    @words_frequency
-  end
+  # This line, writes the commented out code below FOR us and
+  # is generally placed the top of the file (e.g. line 2)
+  attr_reader :frequencies
+  # def frequencies
+  #   @frequencies
+  # end
 
   def top_words(number)
     @words_frequency.take(number)
@@ -42,7 +44,11 @@ class Wordfreq
     }
 
     report_words.each { |word_info|
-      p "#{word_info[0].rjust(max_word_length + 1)} | #{word_info[1].to_s.rjust(max_digits_frequency).ljust(max_digits_frequency + 1).ljust(word_info[1], "*")}"
+      padded_word = word_info[0].rjust(max_word_length + 1)
+      padded_frequency = word_info[1].to_s.rjust(max_digits_frequency)
+      stars = "*" * word_info[1]
+
+      puts "#{padded_word} | #{padded_frequency} #{stars}"
     }
   end
 end

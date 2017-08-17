@@ -33,6 +33,8 @@ class Wordfreq
     report_words = @words_frequency.take(10).to_h
 
     max_word_length = 0
+    max_digits_frequency = report_words.values.first.to_s.length
+
     report_words.each { |word_info|
       unless word_info[0].length < max_word_length
         max_word_length = word_info[0].length
@@ -40,9 +42,7 @@ class Wordfreq
     }
 
     report_words.each { |word_info|
-      astericks = "*"
-      word_info[1].times { astericks += "*"}
-      p "#{word_info[0].rjust(max_word_length + 1)} | #{word_info[1]} #{astericks}"
+      p "#{word_info[0].rjust(max_word_length + 1)} | #{word_info[1].to_s.rjust(max_digits_frequency).ljust(max_digits_frequency + 1).ljust(word_info[1], "*")}"
     }
   end
 end

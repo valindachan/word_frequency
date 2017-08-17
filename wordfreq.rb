@@ -4,11 +4,10 @@ class Wordfreq
     'were', 'will', 'with']
 
   def initialize(filename)
-    @filename = filename
     contents = File.read(filename).downcase.gsub("--", " ")
-    @contents = contents.gsub(/[^a-z0-9\s]/i, "")
-    @words = @contents.split(" ") - STOP_WORDS
-    @words_frequency = @words.each_with_object(Hash.new(0)) { |word, counts| counts[word] += 1  }.sort_by { |word, frequency| frequency }.reverse.to_h
+    contents = contents.gsub(/[^a-z0-9\s]/i, "")
+    words = contents.split(" ") - STOP_WORDS
+    @words_frequency = words.each_with_object(Hash.new(0)) { |word, counts| counts[word] += 1  }.sort_by { |word, frequency| frequency }.reverse.to_h
     top_words(3)
   end
 

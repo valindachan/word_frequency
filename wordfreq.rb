@@ -21,8 +21,7 @@ class Wordfreq
   end
 
   def frequencies
-    @words_frequency = @words.each_with_object(Hash.new(0)) { |word,counts| counts[word] += 1  }.sort_by { |word, frequency| frequency }.reverse.to_h
-    # @words_frequency = Hash.new(0).tap { |h| @words.each { |word| h[word] += 1 } }.sort_by { |word, frequency| frequency }.reverse.to_h
+    @words_frequency = @words.each_with_object(Hash.new(0)) { |word, counts| counts[word] += 1  }.sort_by { |word, frequency| frequency }.reverse.to_h
     @words_frequency
   end
 
@@ -33,13 +32,18 @@ class Wordfreq
   def print_report
     report_words = @words_frequency.take(10).to_h
 
+    max_word_length = 0
     report_words.each { |word_info|
-      spaces = " "
+      unless word_info[0].length < max_word_length
+        max_word_length = word_info[0].length
+      end
+    }
+
+    report_words.each { |word_info|
       astericks = "*"
-      num_spaces = 6 - word_info[0].length
-      num_spaces.times { spaces += " " }
       word_info[1].times { astericks += "*"}
-      p "#{spaces} #{word_info[0]} | #{word_info[1]} #{astericks}"}
+      p "#{word_info[0].rjust(max_word_length + 1)} | #{word_info[1]} #{astericks}"
+    }
   end
 end
 
